@@ -16,8 +16,7 @@ export const MONGO_CONNECTION =
  */
 
 process.env.GOOGLE_APPLICATION_CREDENTIALS =
-  process.env.GOOGLE_APPLICATION_CREDENTIALS ||
-  'src/config/firebase-key-dev.json';
+  process.env.GOOGLE_APPLICATION_CREDENTIALS || 'src/config/firebase-key.json';
 export const GOOGLE_APPLICATION_CREDENTIALS =
   process.env.GOOGLE_APPLICATION_CREDENTIALS;
 /**
