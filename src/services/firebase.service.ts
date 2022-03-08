@@ -5,7 +5,6 @@ import {
 } from '@nestjs/common';
 import * as admin from 'firebase-admin';
 import { splitArray } from 'src/utils/util';
-/* import {splitArray} from '../utils/util'; */
 
 @Injectable()
 export class FirebaseService {

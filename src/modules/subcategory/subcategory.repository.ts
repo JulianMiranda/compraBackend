@@ -91,33 +91,6 @@ export class SubcategoryRepository {
         );
     }
   }
-  async getProduct(id: string): Promise<Subcategory> {
-    try {
-      const document = await this.subcategoryDb.findOne({ _id: id }).populate([
-        {
-          path: 'images',
-          match: { status: true },
-          select: { url: true },
-        },
-        {
-          path: 'category',
-          select: { name: true },
-        },
-      ]);
-
-      if (!document)
-        throw new NotFoundException(`Could not find subcategory for id: ${id}`);
-
-      return document;
-    } catch (e) {
-      if (e.status === 404) throw e;
-      else
-        throw new InternalServerErrorException(
-          'findSubcategory Database error',
-          e,
-        );
-    }
-  }
 
   async create(
     data: Subcategory,
@@ -233,24 +206,6 @@ export class SubcategoryRepository {
           `Could not find subcategory to delete for id: ${id}`,
         );
       return !!document;
-    } catch (e) {
-      if (e.status === 404) throw e;
-      throw new InternalServerErrorException(
-        'deleteSubcategory Database error',
-        e,
-      );
-    }
-  }
-  async setPrice(): Promise<boolean> {
-    try {
-      const subcat = await this.subcategoryDb.find();
-      subcat.map(async (item) => {
-        await this.subcategoryDb.findByIdAndUpdate(item.id, {
-          price: Math.floor(Math.random() * 10),
-        });
-      });
-
-      return true;
     } catch (e) {
       if (e.status === 404) throw e;
       throw new InternalServerErrorException(

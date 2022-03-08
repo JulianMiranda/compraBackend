@@ -10,7 +10,6 @@ import { ENTITY } from '../../enums/entity.enum';
 import { NotificationsRepository } from '../notifications/notifications.repository';
 import { SendGridService } from '../../services/sendgrid.service';
 import { User } from '../../dto/user.dto';
-import { TrackService } from 'src/services/track.service';
 import { Order } from '../../dto/order.dto';
 import { NOTIFICATION } from 'src/enums/notification.enum';
 
@@ -22,7 +21,6 @@ export class OrderRepository {
     @InjectModel('Order') private orderDb: Model<Order>,
     @InjectModel('User') private userDb: Model<User>,
     private notificationsRepository: NotificationsRepository,
-    private trackService: TrackService,
   ) {}
 
   async getList(query: MongoQuery): Promise<any> {

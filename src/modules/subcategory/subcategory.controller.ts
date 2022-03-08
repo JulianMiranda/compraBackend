@@ -65,14 +65,4 @@ export class SubcategoryController {
   delete(@Param('id') id: string): Promise<boolean> {
     return this.subcategoryRepository.delete(id);
   }
-  @UseGuards(AuthenticationGuard)
-  @Get('/setPrice')
-  setPrice(): Promise<Boolean> {
-    return this.subcategoryRepository.setPrice();
-  }
-
-  @Get('/getProduct/:id')
-  getProduct(@Param('id') id: string): Promise<Subcategory> {
-    return this.subcategoryRepository.getProduct(id);
-  }
 }

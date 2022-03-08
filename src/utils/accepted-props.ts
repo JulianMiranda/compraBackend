@@ -2,12 +2,10 @@ import {
   BadRequestException,
   InternalServerErrorException,
 } from '@nestjs/common';
-import { MyShop } from 'src/dto/my-shop.dto';
 import { Category } from '../dto/category.dto';
 import { Subcategory } from '../dto/subcategory.dto';
 import { User } from '../dto/user.dto';
 import { ENTITY } from '../enums/entity.enum';
-import { THEME } from '../enums/theme.enum';
 import { Order } from '../dto/order.dto';
 
 const checkProps = (props: string[], dataKeys: string[]) => {
@@ -26,14 +24,12 @@ const checkUsersProps = (data: Partial<User>): Partial<User> => {
     'image',
     'status',
     'preferences',
-    'serviceZone',
     'newFavorite',
     'removeFavorite',
     'codes',
     'notificationTokens',
     'theme',
     'phone',
-    'authorized',
   ];
   const { role, theme } = data;
   if (role && !['ADMIN', 'JUN', 'CUN'].includes(role))
@@ -70,11 +66,6 @@ const checkSubcategoriesProps = (
   checkProps(props, Object.keys(data));
   return data;
 };
-const checkShopProps = (data: Partial<MyShop>): Partial<MyShop> => {
-  const props = ['car'];
-  checkProps(props, Object.keys(data));
-  return data;
-};
 
 const checkOrderProps = (data: Partial<Order>): Partial<Order> => {
   const props = ['car'];
@@ -86,7 +77,6 @@ export const acceptedProps = (route: string, data: any): any => {
   if (route === ENTITY.USERS) return checkUsersProps(data);
   else if (route === ENTITY.CATEGORY) return checkCategoriesProps(data);
   else if (route === ENTITY.SUBCATEGORY) return checkSubcategoriesProps(data);
-  else if (route === ENTITY.MYSHOP) return checkShopProps(data);
   else if (route === ENTITY.ORDER) return checkOrderProps(data);
 
   throw new InternalServerErrorException('Invalid Route');

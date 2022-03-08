@@ -16,14 +16,9 @@ import { CategoryModule } from './modules/category/category.module';
 import { CategoryController } from './modules/category/category.controller';
 import { SubcategoryController } from './modules/subcategory/subcategory.controller';
 import { SubcategoryModule } from './modules/subcategory/subcategory.module';
-import { ShopModule } from './modules/shop/shop.module';
-import { ShopController } from './modules/shop/shop.controller';
 import { OrderModule } from './modules/order/order.module';
 import { OrderController } from './modules/order/order.controller';
-import { ExpoService } from './services/expo.service';
 import { SendGridService } from './services/sendgrid.service';
-import { GetTokenMiddleware } from './middlewares/get-token.middleware';
-import { TrackService } from './services/track.service';
 
 @Module({
   imports: [
@@ -39,16 +34,15 @@ import { TrackService } from './services/track.service';
     ImageModule,
     CategoryModule,
     SubcategoryModule,
-    ShopModule,
     OrderModule,
   ],
   controllers: [AppController],
-  providers: [FirebaseService, ExpoService, SendGridService],
+  providers: [FirebaseService, SendGridService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer): void {
     consumer
-      .apply(GetTokenMiddleware)
+      .apply(GetUserMiddleware)
       .forRoutes(
         AuthController,
         UserController,
@@ -56,7 +50,6 @@ export class AppModule implements NestModule {
         ImageController,
         CategoryController,
         SubcategoryController,
-        ShopController,
         OrderController,
       );
   }
