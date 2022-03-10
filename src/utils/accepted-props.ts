@@ -72,7 +72,7 @@ const checkSubcategoriesProps = (
 };
 
 const checkOrderProps = (data: Partial<Order>): Partial<Order> => {
-  const props = ['car', 'coordinates'];
+  const props = ['car', 'coordinates',"cost", "description", "currency","user","owner","status"];
   checkProps(props, Object.keys(data));
   return data;
 };
