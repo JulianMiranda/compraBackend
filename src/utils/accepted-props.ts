@@ -62,6 +62,9 @@ const checkSubcategoriesProps = (
     'deleteImages',
     'weight',
     'value',
+    "cost",
+    "stock",
+    "aviableSizes"
   ];
   checkProps(props, Object.keys(data));
   return data;
