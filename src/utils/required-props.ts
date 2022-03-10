@@ -50,7 +50,7 @@ const checkSubcategoriesProps = (
 };
 
 const checkOrderProps = (data: Partial<Order>): Partial<Order> => {
-  const props = ['car'];
+  const props = ['car', 'coordinates'];
   const dataCopy = prepareProps(props, { ...data });
   checkNullOrUndefined(props, dataCopy);
   return data;

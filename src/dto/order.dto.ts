@@ -1,4 +1,11 @@
-import { IsArray, IsMongoId, IsNumber, IsString } from 'class-validator';
+import {
+  IsArray,
+  IsLatLong,
+  IsMongoId,
+  IsNumber,
+  IsObject,
+  IsString,
+} from 'class-validator';
 import { Document } from 'mongoose';
 
 export class Order extends Document {
@@ -20,4 +27,10 @@ export class Order extends Document {
 
   @IsNumber()
   totalCost: number;
+
+  @IsLatLong()
+  coordinates: any;
+
+  @IsObject()
+  location: any;
 }

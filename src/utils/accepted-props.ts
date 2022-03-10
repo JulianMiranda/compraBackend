@@ -30,6 +30,7 @@ const checkUsersProps = (data: Partial<User>): Partial<User> => {
     'notificationTokens',
     'theme',
     'phone',
+    'coordinates',
   ];
   const { role, theme } = data;
   if (role && !['ADMIN', 'JUN', 'CUN'].includes(role))
@@ -62,16 +63,16 @@ const checkSubcategoriesProps = (
     'deleteImages',
     'weight',
     'value',
-    "cost",
-    "stock",
-    "aviableSizes"
+    'cost',
+    'stock',
+    'aviableSizes',
   ];
   checkProps(props, Object.keys(data));
   return data;
 };
 
 const checkOrderProps = (data: Partial<Order>): Partial<Order> => {
-  const props = ['car'];
+  const props = ['car', 'coordinates'];
   checkProps(props, Object.keys(data));
   return data;
 };

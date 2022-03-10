@@ -25,7 +25,7 @@ export class UserRepository {
     try {
       const { filter, projection, sort, limit, skip, page, population } = query;
       const [count, users] = await Promise.all([
-        this.userDb.count(filter),
+        this.userDb.countDocuments(filter),
         this.userDb
           .find(filter, projection)
           .sort(sort)
@@ -66,14 +66,28 @@ export class UserRepository {
     image: Partial<Image>,
   ): Promise<User> {
     try {
-      const { newFavorite, removeFavorite, notificationTokens, ...rest } = data;
+      const {
+        newFavorite,
+        removeFavorite,
+        notificationTokens,
+        coordinates,
+        ...rest
+      } = data;
 
-      /* if (notificationTokens) {
+      if (coordinates) {
+        data.location = { type: 'Point', coordinates };
+        await this.userDb.findOneAndUpdate(
+          { _id: id },
+          { location: data.location },
+        );
+      }
+
+      if (notificationTokens) {
         await this.userDb.findOneAndUpdate(
           { _id: id },
           { $addToSet: { notificationTokens } },
         );
-      } */
+      }
 
       if (newFavorite) {
         await this.userDb.findOneAndUpdate(
@@ -109,6 +123,7 @@ export class UserRepository {
           favoriteUnits: true,
           lastNotificationCheck: true,
           firebaseId: true,
+          location: true,
         })
         .populate([
           {

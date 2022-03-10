@@ -2,6 +2,8 @@ import {
   IsArray,
   IsBoolean,
   IsEmail,
+  IsLatLong,
+  IsObject,
   IsPhoneNumber,
   IsString,
   IsUrl,
@@ -49,8 +51,14 @@ export class User extends Document {
   removeFavorite: string;
 
   @IsString()
-  notificationTokens: string;
+  notificationTokens: never;
 
   @IsString()
   theme: string;
+
+  @IsLatLong()
+  coordinates: any;
+
+  @IsObject()
+  location: any;
 }

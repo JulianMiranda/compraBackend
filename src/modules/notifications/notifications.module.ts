@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { NotificationSchema } from 'src/schemas/notification.schema';
-import { OrderSchema } from 'src/schemas/order.schema';
-import { UserSchema } from 'src/schemas/user.schema';
+import OrderSchema from 'src/schemas/order.schema';
+import UserSchema from 'src/schemas/user.schema';
 import { NotificationsController } from './notifications.controller';
 import { NotificationsRepository } from './notifications.repository';
 

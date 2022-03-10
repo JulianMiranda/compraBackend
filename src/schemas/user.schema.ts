@@ -2,7 +2,7 @@ import * as mongoose from 'mongoose';
 import { THEME } from 'src/enums/theme.enum';
 import { schemaOptions } from '../utils/index';
 
-export const UserSchema = new mongoose.Schema(
+const UserSchema = new mongoose.Schema(
   {
     firebaseId: String,
     name: { type: String, index: true },
@@ -14,6 +14,10 @@ export const UserSchema = new mongoose.Schema(
     status: { type: Boolean, default: true, index: true },
     preferences: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Category' }],
     notificationTokens: [{ type: String }],
+    location: {
+      type: { type: String },
+      coordinates: [],
+    },
     theme: {
       type: String,
       default: THEME.DEFAULT,
@@ -22,3 +26,6 @@ export const UserSchema = new mongoose.Schema(
   },
   { ...schemaOptions },
 );
+UserSchema.index({ location: '2dsphere' });
+
+export default UserSchema;

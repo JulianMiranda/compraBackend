@@ -64,6 +64,10 @@ export class OrderRepository {
 
   async setOrder(data: Order): Promise<boolean> {
     try {
+      data.location = {
+        type: 'Point',
+        coordinates: data.coordinates,
+      };
       const newOrder = new this.orderDb(data);
       const document = await newOrder.save();
       if (document) {
@@ -88,6 +92,10 @@ export class OrderRepository {
 
   async create(data: Order): Promise<boolean> {
     try {
+      data.location = {
+        type: 'Point',
+        coordinates: data.coordinates,
+      };
       const newOrder = new this.orderDb(data);
       const document = await newOrder.save();
 
@@ -99,6 +107,9 @@ export class OrderRepository {
 
   async update(id: string, data: Partial<Order>): Promise<boolean> {
     try {
+      const { coordinates } = data;
+      if (coordinates) data.location = { type: 'Point', coordinates };
+
       const document = await this.orderDb.findOneAndUpdate(
         { _id: id },
         { ...data },
