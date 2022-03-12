@@ -29,8 +29,11 @@ export class AuthRepository {
             image: true,
             preferences: true,
             role: true,
-            favoriteUnits: true,
             lastNotificationCheck: true,
+            status: true,
+            notificationTokens: true,
+            location: true,
+            theme: true,
           })
           .populate([
             {
@@ -74,6 +77,10 @@ export class AuthRepository {
           preferences: true,
           role: true,
           lastNotificationCheck: true,
+          status: true,
+          notificationTokens: true,
+          location: true,
+          theme: true,
         })
         .populate([
           {
