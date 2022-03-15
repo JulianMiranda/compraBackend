@@ -8,7 +8,11 @@ export const NotificationSchema = new mongoose.Schema(
     body: String,
     type: {
       type: String,
-      enum: [NOTIFICATION.ORDER],
+      enum: [
+        NOTIFICATION.ORDER,
+        NOTIFICATION.NEW_SUBCATEGORY,
+        NOTIFICATION.UPDATE_SUBCATEGORY,
+      ],
     },
     identifier: { type: mongoose.Schema.Types.ObjectId },
   },

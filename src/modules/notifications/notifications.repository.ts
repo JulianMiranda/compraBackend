@@ -6,6 +6,7 @@ import { flatten } from 'src/utils/util';
 import { Order } from '../../dto/order.dto';
 import { User } from '../../dto/user.dto';
 import { NOTIFICATION } from '../../enums/notification.enum';
+import { Subcategory } from '../../dto/subcategory.dto';
 
 @Injectable()
 export class NotificationsRepository {
@@ -13,6 +14,7 @@ export class NotificationsRepository {
     @InjectModel('Notification') private notificationDb: Model<any>,
     @InjectModel('User') private usersDb: Model<User>,
     @InjectModel('Order') private orderDb: Model<Order>,
+    @InjectModel('Subcategory') private subcategoryDb: Model<Subcategory>,
   ) {}
 
   async newOrder(type: NOTIFICATION, order: string): Promise<any> {
@@ -51,6 +53,67 @@ export class NotificationsRepository {
           token,
         }));
       });
+      FirebaseService.sendPushNotifications(flatten(pushNotifications));
+    } catch (e) {
+      throw new InternalServerErrorException(
+        'create notification Database error',
+        e,
+      );
+    }
+  }
+
+  async createSubcategoryNotification(
+    subcategoryId: string,
+    type: NOTIFICATION,
+  ): Promise<any> {
+    try {
+      console.log('Haciendo Notification');
+      const subcategory = await this.subcategoryDb
+        .findOne({ _id: subcategoryId }, { name: 1 })
+        .lean();
+
+      const subscribers = await this.usersDb
+        .find({ role: 'CUN' }, { notificationTokens: 1, name: 1 })
+        .lean();
+
+      if (subscribers.length === 0) return;
+
+      const notificationsArray = [];
+      let body = '';
+
+      if (type === NOTIFICATION.NEW_SUBCATEGORY)
+        body = `Hemos agregado un nuevo producto 🆕 ${subcategory.name.toLocaleUpperCase()} 🆕`;
+      else if (type === NOTIFICATION.UPDATE_SUBCATEGORY)
+        body = `🤩Se ha actualizado el precio ${subcategory.name.toLocaleUpperCase()}. Aprovecha ahora esta opotunidad única !!!!!`;
+
+      for (const user of subscribers) {
+        notificationsArray.push({
+          user: user._id,
+          title: user.name,
+          body,
+          type,
+          identifier: subcategory._id,
+          notificationTokens: user.notificationTokens,
+        });
+      }
+
+      await this.notificationDb.insertMany(notificationsArray);
+
+      const pushNotifications = notificationsArray.map((item) => {
+        const { title, user } = item;
+        return item.notificationTokens.map((token: string) => ({
+          notification: {
+            title: `Hola ▫️ ${title}`,
+            body,
+          },
+          data: {
+            userId: user.toString(),
+            click_action: '',
+          },
+          token,
+        }));
+      });
+
       FirebaseService.sendPushNotifications(flatten(pushNotifications));
     } catch (e) {
       throw new InternalServerErrorException(

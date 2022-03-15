@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { NotificationSchema } from 'src/schemas/notification.schema';
+import SubcategorySchema from 'src/schemas/subcategory.schema';
 import OrderSchema from 'src/schemas/order.schema';
 import UserSchema from 'src/schemas/user.schema';
 import { NotificationsController } from './notifications.controller';
@@ -20,6 +21,10 @@ import { NotificationsRepository } from './notifications.repository';
       {
         name: 'Order',
         schema: OrderSchema,
+      },
+      {
+        name: 'Subcategory',
+        schema: SubcategorySchema,
       },
     ]),
   ],

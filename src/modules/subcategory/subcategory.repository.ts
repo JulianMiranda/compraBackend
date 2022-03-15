@@ -5,11 +5,13 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { NOTIFICATION } from 'src/enums/notification.enum';
 import { Image } from '../../dto/image.dto';
 import { MongoQuery } from '../../dto/mongo-query.dto';
 import { Subcategory } from '../../dto/subcategory.dto';
 import { ENTITY } from '../../enums/entity.enum';
 import { ImageRepository } from '../image/image.repository';
+import { NotificationsRepository } from '../notifications/notifications.repository';
 
 @Injectable()
 export class SubcategoryRepository {
@@ -18,6 +20,7 @@ export class SubcategoryRepository {
   constructor(
     @InjectModel('Subcategory') private subcategoryDb: Model<Subcategory>,
     private imageRepository: ImageRepository,
+    private notificationsRepository: NotificationsRepository,
   ) {}
 
   async getList(query: MongoQuery): Promise<any> {
@@ -100,7 +103,10 @@ export class SubcategoryRepository {
       const newSubcategory = new this.subcategoryDb(data);
       if (!images) {
         const subcategory = await newSubcategory.save();
-
+        this.notificationsRepository.createSubcategoryNotification(
+          subcategory._id,
+          NOTIFICATION.NEW_SUBCATEGORY,
+        );
         return !!subcategory;
       } else {
         const document = await newSubcategory.save();
@@ -121,7 +127,10 @@ export class SubcategoryRepository {
           { images: newImages },
           { new: true },
         );
-
+        this.notificationsRepository.createSubcategoryNotification(
+          subcategory._id,
+          NOTIFICATION.NEW_SUBCATEGORY,
+        );
         return !!subcategory;
       }
     } catch (e) {
@@ -139,6 +148,10 @@ export class SubcategoryRepository {
     deleteImages: string[],
   ): Promise<boolean> {
     try {
+      let newPrice;
+      if (data.price) {
+        newPrice = data.price;
+      }
       if (images || deleteImages) {
         const storedImages = await this.subcategoryDb
           .findOne({ _id: id }, { images: true, _id: false })
@@ -178,6 +191,12 @@ export class SubcategoryRepository {
             select: { url: true },
           },
         ]);
+      if (newPrice) {
+        this.notificationsRepository.createSubcategoryNotification(
+          document._id,
+          NOTIFICATION.UPDATE_SUBCATEGORY,
+        );
+      }
 
       if (!document)
         throw new NotFoundException(
