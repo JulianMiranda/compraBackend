@@ -107,10 +107,11 @@ export class NotificationsRepository {
             title: `Hola ▫️ ${title}`,
             body,
           },
+
           data: {
             userId: user.toString(),
             subcategoryId: subcategory.toString(),
-            click_action: '',
+            click_action: 'OPEN_SUBCATEGORY',
           },
           token,
         }));
