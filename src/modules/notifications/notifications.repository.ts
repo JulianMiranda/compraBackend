@@ -89,6 +89,7 @@ export class NotificationsRepository {
       for (const user of subscribers) {
         notificationsArray.push({
           user: user._id,
+          subcategory: subcategory._id,
           title: user.name,
           body,
           type,
@@ -100,7 +101,7 @@ export class NotificationsRepository {
       await this.notificationDb.insertMany(notificationsArray);
 
       const pushNotifications = notificationsArray.map((item) => {
-        const { title, user } = item;
+        const { title, user, subcategory } = item;
         return item.notificationTokens.map((token: string) => ({
           notification: {
             title: `Hola ▫️ ${title}`,
@@ -108,6 +109,7 @@ export class NotificationsRepository {
           },
           data: {
             userId: user.toString(),
+            subcategoryId: subcategory.toString(),
             click_action: '',
           },
           token,
