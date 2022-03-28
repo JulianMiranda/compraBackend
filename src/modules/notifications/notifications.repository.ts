@@ -82,7 +82,6 @@ export class NotificationsRepository {
           },
         ])
         .lean();
-
       const subscribers = await this.usersDb
         .find({ role: 'CUN' }, { notificationTokens: 1, name: 1 })
         .lean();
@@ -121,7 +120,7 @@ export class NotificationsRepository {
 
           data: {
             userId: user.toString(),
-            subcategoryId: subcategory.toString(),
+            subcategory: JSON.stringify(subcategory),
             click_action: 'OPEN_SUBCATEGORY',
           },
           token,
