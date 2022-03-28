@@ -69,7 +69,18 @@ export class NotificationsRepository {
     try {
       console.log('Haciendo Notification');
       const subcategory = await this.subcategoryDb
-        .findOne({ _id: subcategoryId }, { name: 1 })
+        .findOne({ _id: subcategoryId })
+        .populate([
+          {
+            path: 'images',
+            match: { status: true },
+            select: { url: true },
+          },
+          {
+            path: 'category',
+            select: { name: true },
+          },
+        ])
         .lean();
 
       const subscribers = await this.usersDb
@@ -89,7 +100,7 @@ export class NotificationsRepository {
       for (const user of subscribers) {
         notificationsArray.push({
           user: user._id,
-          subcategory: subcategory._id,
+          subcategory,
           title: user.name,
           body,
           type,
