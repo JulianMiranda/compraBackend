@@ -6,6 +6,7 @@ import { Subcategory } from 'src/dto/subcategory.dto';
 import { Category } from '../dto/category.dto';
 import { ENTITY } from '../enums/entity.enum';
 import { Order } from '../dto/order.dto';
+import { MyShop } from 'src/dto/my-shop.dto';
 
 const prepareProps = (props: string[], data: any) => {
   for (const key of Object.keys(data)) {
@@ -40,6 +41,13 @@ const checkCategoriesProps = (data: Partial<Category>): Partial<Category> => {
   checkNullOrUndefined(props, dataCopy);
   return data;
 };
+
+const checkShopProps = (data: Partial<MyShop>): Partial<MyShop> => {
+  const props = ['car'];
+  const dataCopy = prepareProps(props, { ...data });
+  checkNullOrUndefined(props, dataCopy);
+  return data;
+};
 const checkSubcategoriesProps = (
   data: Partial<Subcategory>,
 ): Partial<Subcategory> => {
@@ -60,6 +68,7 @@ export const requiredProps = (route: string, data: any): any => {
   if (route === ENTITY.CATEGORY) return checkCategoriesProps(data);
   if (route === ENTITY.SUBCATEGORY) return checkSubcategoriesProps(data);
   if (route === ENTITY.ORDER) return checkOrderProps(data);
+  if (route === ENTITY.MYSHOP) return checkShopProps(data);
 
   throw new InternalServerErrorException('Invalid Route');
 };

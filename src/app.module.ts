@@ -19,6 +19,8 @@ import { SubcategoryModule } from './modules/subcategory/subcategory.module';
 import { OrderModule } from './modules/order/order.module';
 import { OrderController } from './modules/order/order.controller';
 import { SendGridService } from './services/sendgrid.service';
+import { ShopModule } from './modules/shop/shop.module';
+import { ShopController } from './modules/shop/shop.controller';
 
 @Module({
   imports: [
@@ -31,6 +33,7 @@ import { SendGridService } from './services/sendgrid.service';
     AuthModule,
     UserModule,
     RoleModule,
+    ShopModule,
     ImageModule,
     CategoryModule,
     SubcategoryModule,
@@ -48,6 +51,7 @@ export class AppModule implements NestModule {
         UserController,
         RoleController,
         ImageController,
+        ShopController,
         CategoryController,
         SubcategoryController,
         OrderController,
